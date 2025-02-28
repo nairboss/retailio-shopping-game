@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Retailio AR Shopping Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background: #f4f4f4;
+        }
+        h1 {
+            margin-top: 20px;
+        }
+        #game-container {
+            width: 90%;
+            max-width: 600px;
+            height: 400px;
+            margin: 20px auto;
+            position: relative;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .product {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .product:hover {
+            transform: scale(1.2);
+        }
+        #score {
+            font-size: 20px;
+            margin-top: 10px;
+        }
+        #timer {
+            font-size: 18px;
+            color: red;
+            margin-top: 5px;
+        }
+        #message {
+            font-size: 22px;
+            font-weight: bold;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Retailio AR Shopping Challenge</h1>
+    <p>Click on as many floating products as you can before time runs out!</p>
+    
+    <div id="game-container"></div>
+    
+    <p id="score">Score: 0</p>
+    <p id="timer">Time Left: <span id="time">30</span> seconds</p>
+    
+    <p id="message"></p>
+
+    <script>
+        let score = 0;
+        let timeLeft = 30;
+        let gameContainer = document.getElementById('game-container');
+        let timeDisplay = document.getElementById('time');
+        let message = document.getElementById('message');
+
+        function generateProduct() {
+            let product = document.createElement('img');
+            product.src = 'https://via.placeholder.com/50'; // Placeholder image for a product
+            product.classList.add('product');
+            
+            // Random positioning
+            let x = Math.random() * (gameContainer.clientWidth - 50);
+            let y = Math.random() * (gameContainer.clientHeight - 50);
+            product.style.left = x + 'px';
+            product.style.top = y + 'px';
+
+            // Click event to collect product
+            product.onclick = function() {
+                score += 10;
+                document.getElementById('score').innerText = "Score: " + score;
+                product.remove(); // Remove after click
+            };
+
+            gameContainer.appendChild(product);
+
+            // Remove product after a while if not clicked
+            setTimeout(() => {
+                if (product.parentNode) {
+                    product.remove();
+                }
+            }, 3000);
+        }
+
+        // Generate products at intervals
+        let productInterval = setInterval(generateProduct, 1000);
+
+        // Countdown Timer
+        let timer = setInterval(() => {
+            timeLeft--;
+            timeDisplay.innerText = timeLeft;
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                clearInterval(productInterval);
+                message.innerText = "Game Over! Final Score: " + score;
+                message.style.display = "block";
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
