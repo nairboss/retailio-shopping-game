@@ -6,14 +6,20 @@
     <title>Retailio AR Shopping Game</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
             margin: 0;
             padding: 0;
-            background: #f4f4f4;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
         }
         h1 {
             margin-top: 20px;
+            font-size: 26px;
+            color: #343a40;
+        }
+        p {
+            font-size: 18px;
+            color: #555;
         }
         #game-container {
             width: 90%;
@@ -22,39 +28,56 @@
             margin: 20px auto;
             position: relative;
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
             overflow: hidden;
+            border: 2px solid #17a2b8;
         }
         .product {
             width: 60px;
             height: 60px;
             position: absolute;
             cursor: pointer;
-            transition: transform 0.2s ease;
+            transition: transform 0.2s ease, opacity 0.5s ease;
         }
         .product:hover {
             transform: scale(1.2);
+            filter: brightness(1.2);
         }
         #score {
-            font-size: 20px;
+            font-size: 22px;
+            font-weight: bold;
+            color: #17a2b8;
             margin-top: 10px;
         }
         #timer {
             font-size: 18px;
             color: red;
+            font-weight: bold;
             margin-top: 5px;
         }
         #message {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: bold;
             margin-top: 20px;
             display: none;
+            color: #28a745;
+        }
+        .reward {
+            font-size: 22px;
+            font-weight: bold;
+            color: #ff8c00;
+            margin-top: 15px;
+            animation: pop 1s infinite alternate;
+        }
+        @keyframes pop {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
         }
     </style>
 </head>
 <body>
-    <h1>Retailio AR Shopping Challenge</h1>
+    <h1>Retailio AR Shopping Challenge 🎯</h1>
     <p>Click on as many floating products as you can before time runs out!</p>
     
     <div id="game-container"></div>
@@ -66,7 +89,7 @@
 
     <script>
         let score = 0;
-        let timeLeft = 10; // 10-second game
+        let timeLeft = 10; // 10-second game duration
         let gameContainer = document.getElementById('game-container');
         let timeDisplay = document.getElementById('time');
         let message = document.getElementById('message');
@@ -93,7 +116,8 @@
             product.onclick = function() {
                 score += 10;
                 document.getElementById('score').innerText = "Score: " + score;
-                product.remove(); // Remove after click
+                product.style.opacity = '0'; // Fade-out effect
+                setTimeout(() => product.remove(), 500);
             };
 
             gameContainer.appendChild(product);
@@ -116,7 +140,10 @@
             if (timeLeft <= 0) {
                 clearInterval(timer);
                 clearInterval(productInterval);
-                message.innerText = "Game Over! Final Score: " + score;
+
+                // Display final message with discount offer
+                let discount = score > 0 ? score : 5; // Ensure a minimum 5% discount
+                message.innerHTML = `🎉 Game Over! Final Score: ${score}<br><span class="reward">Hurray! You get ${discount}% OFF on your next purchase! 🛍️</span>`;
                 message.style.display = "block";
             }
         }, 1000);
