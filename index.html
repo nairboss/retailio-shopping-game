@@ -27,8 +27,8 @@
             overflow: hidden;
         }
         .product {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             position: absolute;
             cursor: pointer;
             transition: transform 0.2s ease;
@@ -66,19 +66,26 @@
 
     <script>
         let score = 0;
-        let timeLeft = 10; // Reduced time to 10 seconds
+        let timeLeft = 10; // 10-second game
         let gameContainer = document.getElementById('game-container');
         let timeDisplay = document.getElementById('time');
         let message = document.getElementById('message');
 
+        // Array of product image filenames
+        const productImages = ["image1.webp", "image2.jpg", "image3.jpg", "image4.jpg"];
+
         function generateProduct() {
             let product = document.createElement('img');
-            product.src = 'https://via.placeholder.com/50'; // Placeholder image for a product
+
+            // Randomly select an image from the array
+            let randomImage = productImages[Math.floor(Math.random() * productImages.length)];
+            product.src = randomImage;
+
             product.classList.add('product');
             
             // Random positioning
-            let x = Math.random() * (gameContainer.clientWidth - 50);
-            let y = Math.random() * (gameContainer.clientHeight - 50);
+            let x = Math.random() * (gameContainer.clientWidth - 60);
+            let y = Math.random() * (gameContainer.clientHeight - 60);
             product.style.left = x + 'px';
             product.style.top = y + 'px';
 
